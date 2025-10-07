@@ -1,0 +1,770 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./css/styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <title>Document</title>
+</head>
+
+<body>
+    <!-- Main App -->
+    <div id="main-app" class="page">
+        <!-- Sidebar Navigation -->
+        <nav class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">
+                    <i class="fas fa-graduation-cap"></i>
+                    <span>FinanceU</span>
+                </div>
+                <button class="sidebar-toggle" id="sidebar-toggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+
+            <div class="sidebar-content">
+                <div class="user-info" id="user-info">
+                    <div class="user-avatar">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <div class="user-details">
+                        <div class="user-name" id="user-name">Usuario</div>
+                        <div class="user-email" id="user-email">usuario@email.com</div>
+                    </div>
+                </div>
+
+                <ul class="nav-menu">
+                    <li class="nav-item">
+                        <a href="#" class="nav-link active" data-section="dashboard">
+                            <i class="fas fa-chart-line"></i>
+                            <span>Dashboard</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link" data-section="transactions">
+                            <i class="fas fa-exchange-alt"></i>
+                            <span>Transacciones</span>
+                        </a>
+                    </li>
+                    
+                    <li class="nav-item">
+                        <a href="#" class="nav-link" data-section="goals">
+                            <i class="fas fa-target"></i>
+                            <span>Metas</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link" data-section="analysis">
+                            <i class="fas fa-chart-bar"></i>
+                            <span>Análisis</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link" data-section="calendar">
+                            <i class="fas fa-calendar-alt"></i>
+                            <span>Calendario</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link" data-section="profile">
+                            <i class="fas fa-user-cog"></i>
+                            <span>Perfil</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="sidebar-footer">
+                <button class="logout-btn" onclick="logout()">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <a href="index.html"><span>Cerrar Sesión</span></a>
+                </button>
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Mobile Header -->
+            <header class="mobile-header">
+                <button class="mobile-menu-btn" onclick="toggleSidebar()">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <div class="logo">
+                    <i class="fas fa-graduation-cap"></i>
+                    <span>FinanceU</span>
+                </div>
+                <div class="header-actions">
+                    <button class="notification-btn">
+                        <i class="fas fa-bell"></i>
+                    </button>
+                </div>
+            </header>
+
+            <!-- Dashboard Section -->
+            <section id="dashboard-section" class="content-section active">
+                <div class="section-header">
+                    <h1>Dashboard Financiero</h1>
+                    <p>Resumen de tu situación financiera actual</p>
+                </div>
+
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon income">
+                            <i class="fas fa-arrow-up"></i>
+                        </div>
+                        <div class="stat-content">
+                            <div class="stat-label">Ingresos del Mes</div>
+                            <div class="stat-value" id="monthly-income">$0</div>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-icon expense">
+                            <i class="fas fa-arrow-down"></i>
+                        </div>
+                        <div class="stat-content">
+                            <div class="stat-label">Gastos del Mes</div>
+                            <div class="stat-value" id="monthly-expenses">$0</div>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-icon balance">
+                            <i class="fas fa-wallet"></i>
+                        </div>
+                        <div class="stat-content">
+                            <div class="stat-label">Balance Total</div>
+                            <div class="stat-value" id="total-balance">$0</div>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-icon savings">
+                            <i class="fas fa-piggy-bank"></i>
+                        </div>
+                        <div class="stat-content">
+                            <div class="stat-label">Total Ahorrado</div>
+                            <div class="stat-value" id="total-savings">$0</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="dashboard-grid">
+                    <div class="dashboard-card">
+                        <div class="card-header">
+                            <h3>Gastos por Categoría</h3>
+                        </div>
+                        <div class="card-content">
+                            <canvas id="expenses-chart"></canvas>
+                        </div>
+                    </div>
+
+                    <div class="dashboard-card">
+                        <div class="card-header">
+                            <h3>Transacciones Recientes</h3>
+                        </div>
+                        <div class="card-content">
+                            <div id="recent-transactions" class="transactions-list"></div>
+                        </div>
+                    </div>
+
+                    <div class="dashboard-card">
+                        <div class="card-header">
+                            <h3>Progreso de Metas</h3>
+                        </div>
+                        <div class="card-content">
+                            <div id="goals-progress" class="goals-list"></div>
+                        </div>
+                    </div>
+
+                    <div class="dashboard-card">
+                        <div class="card-header">
+                            <h3>Tendencia Mensual</h3>
+                        </div>
+                        <div class="card-content">
+                            <canvas id="trend-chart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="transactions-section" class="content-section active">
+                <div class="section-header">
+                    <h1>Gestión de Transacciones</h1>
+                    <button class="btn-primary" onclick="openTransactionModal()">
+                        <i class="fas fa-plus"></i>
+                        Nueva Transacción
+                    </button>
+                </div>
+
+                <div class="transactions-filters">
+                    <div class="filter-group">
+                        <label>Tipo:</label>
+                        <select id="transaction-type-filter">
+                            <option value="all">Todos</option>
+                            <option value="income">Ingresos</option>
+                            <option value="expense">Gastos</option>
+                        </select>
+                    </div>
+
+                    <div class="filter-group">
+                        <label>Categoría:</label>
+                        <select id="transaction-category-filter">
+                            <option value="all">Todas</option>
+                            <option value="food">Alimentación</option>
+                            <option value="transport">Transporte</option>
+                            <option value="education">Educación</option>
+                            <option value="entertainment">Entretenimiento</option>
+                            <option value="health">Salud</option>
+                            <option value="shopping">Compras</option>
+                            <option value="other">Otros</option>
+                        </select>
+                    </div>
+
+                    <div class="filter-group">
+                        <label>Fecha:</label>
+                        <input type="date" id="transaction-date-filter">
+                    </div>
+
+                    <button class="btn-secondary" onclick="clearFilters()">
+                        <i class="fas fa-times"></i>
+                        Limpiar
+                    </button>
+                </div>
+
+                <div class="transactions-table-container">
+                    <table class="transactions-table" id="transactions-table">
+                        <thead>
+                            <tr>
+                                <th>Fecha</th>
+                                <th>Descripción</th>
+                                <th>Categoría</th>
+                                <th>Tipo</th>
+                                <th>Monto</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody id="transactions-tbody">
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+            <!-- Pockets Section -->
+           
+            <!-- Goals Section -->
+            <section id="goals-section" class="content-section">
+                <div class="section-header">
+                    <h1>Metas Financieras</h1>
+                    <button class="btn-primary" onclick="openGoalModal()">
+                        <i class="fas fa-plus"></i>
+                        Nueva Meta
+                    </button>
+                </div>
+
+                <div class="goals-grid" id="goals-grid">
+                </div>
+            </section>
+
+            <!-- Analysis Section -->
+            <section id="analysis-section" class="content-section">
+                <div class="section-header">
+                    <h1>Análisis Semanal</h1>
+                    <p>Análisis detallado de tus patrones de gasto</p>
+                </div>
+
+                <div class="analysis-grid">
+                    <div class="analysis-card">
+                        <div class="card-header">
+                            <h3>Resumen Semanal</h3>
+                        </div>
+                        <div class="card-content">
+                            <div class="weekly-stats">
+                                <div class="weekly-stat">
+                                    <span class="stat-label">Ingresos:</span>
+                                    <span class="stat-value income" id="weekly-income">$0</span>
+                                </div>
+                                <div class="weekly-stat">
+                                    <span class="stat-label">Gastos:</span>
+                                    <span class="stat-value expense" id="weekly-expenses">$0</span>
+                                </div>
+                                <div class="weekly-stat">
+                                    <span class="stat-label">Balance:</span>
+                                    <span class="stat-value" id="weekly-balance">$0</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="analysis-card">
+                        <div class="card-header">
+                            <h3>Gastos por Día</h3>
+                        </div>
+                        <div class="card-content">
+                            <canvas id="daily-expenses-chart"></canvas>
+                        </div>
+                    </div>
+
+                    <div class="analysis-card">
+                        <div class="card-header">
+                            <h3>Categorías más Gastadas</h3>
+                        </div>
+                        <div class="card-content">
+                            <div id="top-categories" class="categories-list"></div>
+                        </div>
+                    </div>
+
+                    <div class="analysis-card">
+                        <div class="card-header">
+                            <h3>Comparación con Semana Anterior</h3>
+                        </div>
+                        <div class="card-content">
+                            <div id="comparison-chart" class="comparison-content"></div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <!-- Calendar Section -->
+            <section id="calendar-section" class="content-section">
+                <div class="section-header">
+                    <h1>Calendario y Recordatorios</h1>
+                    <button class="btn-primary" onclick="openReminderModal()">
+                        <i class="fas fa-plus"></i>
+                        Nuevo Recordatorio
+                    </button>
+                </div>
+
+                <div class="calendar-grid">
+                    <div class="calendar-card">
+                        <div class="card-header">
+                            <h3>Calendario</h3>
+                            <div class="calendar-nav">
+                                <button id="prev-month" class="calendar-nav-btn">
+                                    <i class="fas fa-chevron-left"></i>
+                                </button>
+                                <span id="current-month">Diciembre 2024</span>
+                                <button id="next-month" class="calendar-nav-btn">
+                                    <i class="fas fa-chevron-right"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="card-content">
+                            <div class="calendar" id="calendar"></div>
+                        </div>
+                    </div>
+
+                    <div class="reminders-card">
+                        <div class="card-header">
+                            <h3>Próximos Recordatorios</h3>
+                        </div>
+                        <div class="card-content">
+                            <div id="reminders-list" class="reminders-list"></div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Profile Section -->
+            <section id="profile-section" class="content-section">
+                <div class="section-header">
+                    <h1>Perfil de Usuario</h1>
+                    <p>Gestiona tu información personal</p>
+                </div>
+
+                <div class="profile-grid">
+                    <div class="profile-card">
+                        <div class="card-header">
+                            <h3>Información Personal</h3>
+                        </div>
+                        <div class="card-content">
+                            <form id="profile-form" class="profile-form">
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label for="profile-firstname">Nombre</label>
+                                        <input type="text" id="profile-firstname" name="firstName">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="profile-lastname">Apellido</label>
+                                        <input type="text" id="profile-lastname" name="lastName">
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="profile-email">Correo Electrónico</label>
+                                    <input type="email" id="profile-email" name="email">
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="profile-university">Universidad</label>
+                                    <select id="profile-university" name="university">
+                                        <option value="">Selecciona tu universidad</option>
+                                        <option value="Universidad Nacional de Colombia">Universidad Nacional de
+                                            Colombia
+                                        </option>
+                                        <option value="Universidad de los Andes">Universidad de los Andes</option>
+                                        <option value="Pontificia Universidad Javeriana">Pontificia Universidad
+                                            Javeriana
+                                        </option>
+                                        <option value="Universidad del Rosario">Universidad del Rosario</option>
+                                        <option value="Universidad de La Sabana">Universidad de La Sabana</option>
+                                        <option value="Universidad EAFIT">Universidad EAFIT</option>
+                                        <option value="Universidad del Norte">Universidad del Norte</option>
+                                        <option value="Otra">Otra</option>
+                                    </select>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="profile-program">Programa de Estudio</label>
+                                    <input type="text" id="profile-program" name="studyProgram"
+                                        placeholder="Ej: Ingeniería de Sistemas">
+                                </div>
+
+                                <button type="submit" class="btn-primary">
+                                    <i class="fas fa-save"></i>
+                                    Guardar Cambios
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+
+                    <div class="profile-card">
+                        <div class="card-header">
+                            <h3>Estadísticas de Uso</h3>
+                        </div>
+                        <div class="card-content">
+                            <div class="usage-stats">
+                                <div class="usage-stat">
+                                    <div class="usage-icon">
+                                        <i class="fas fa-exchange-alt"></i>
+                                    </div>
+                                    <div class="usage-info">
+                                        <div class="usage-label">Transacciones Registradas</div>
+                                        <div class="usage-value" id="total-transactions">0</div>
+                                    </div>
+                                </div>
+
+                                <div class="usage-stat">
+                                    <div class="usage-icon">
+                                        <i class="fas fa-piggy-bank"></i>
+                                    </div>
+                                    
+                                </div>
+
+                                <div class="usage-stat">
+                                    <div class="usage-icon">
+                                        <i class="fas fa-target"></i>
+                                    </div>
+                                    <div class="usage-info">
+                                        <div class="usage-label">Metas Establecidas</div>
+                                        <div class="usage-value" id="total-goals">0</div>
+                                    </div>
+                                </div>
+
+                                <div class="usage-stat">
+                                    <div class="usage-icon">
+                                        <i class="fas fa-calendar-check"></i>
+                                    </div>
+                                    <div class="usage-info">
+                                        <div class="usage-label">Días Consecutivos</div>
+                                        <div class="usage-value" id="consecutive-days">0</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Modals -->
+
+    <!-- Transaction Modal -->
+    <div id="transaction-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="transaction-modal-title">Nueva Transacción</h3>
+                <button class="modal-close" onclick="closeTransactionModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="transaction-form" class="modal-form">
+                    <div class="form-group">
+                        <label for="transaction-type">Tipo</label>
+                        <select id="transaction-type" name="type" required>
+                            <option value="">Selecciona el tipo</option>
+                            <option value="income">Ingreso</option>
+                            <option value="expense">Gasto</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="transaction-description">Descripción</label>
+                        <input type="text" id="transaction-description" name="description" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="transaction-amount">Monto (COP)</label>
+                        <input type="number" id="transaction-amount" name="amount" min="0" step="100" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="transaction-category">Categoría</label>
+                        <select id="transaction-category" name="category" required>
+                            <option value="">Selecciona la categoría</option>
+                            <option value="food">Alimentación</option>
+                            <option value="transport">Transporte</option>
+                            <option value="education">Educación</option>
+                            <option value="entertainment">Entretenimiento</option>
+                            <option value="health">Salud</option>
+                            <option value="shopping">Compras</option>
+                            <option value="salary">Salario</option>
+                            <option value="scholarship">Beca</option>
+                            <option value="family">Familia</option>
+                            <option value="freelance">Freelance</option>
+                            <option value="other">Otros</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="transaction-date">Fecha</label>
+                        <input type="date" id="transaction-date" name="date" required>
+                    </div>
+
+                    <div class="modal-actions">
+                        <button type="button" class="btn-secondary" onclick="closeTransactionModal()">
+                            Cancelar
+                        </button>
+                        <button type="submit" class="btn-primary">
+                            Guardar Transacción
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Pocket Modal -->
+    <div id="pocket-modal" class="modal">
+       
+            <div class="modal-body">
+                <form id="pocket-form" class="modal-form">
+                    
+                    <div class="form-group">
+                        <label for="pocket-target">Meta de Ahorro (COP)</label>
+                        <input type="number" id="pocket-target" name="target" min="0" step="1000" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="pocket-icon">Icono</label>
+                        <select id="pocket-icon" name="icon" required>
+                            <option value="">Elige un icono</option>
+                            <option value="piggy-bank">🐷 Alcancía</option>
+                            <option value="graduation-cap">🎓 Estudios</option>
+                            <option value="plane">✈️ Viajes</option>
+                            <option value="heart">❤️ Salud</option>
+                            <option value="car">🚗 Transporte</option>
+                            <option value="home">🏠 Hogar</option>
+                            <option value="gift">🎁 Regalos</option>
+                            <option value="star">⭐ Otros</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="pocket-color">Color</label>
+                        <select id="pocket-color" name="color" required>
+                            <option value="">Elige un color</option>
+                            <option value="blue">🔵 Azul</option>
+                            <option value="green">🟢 Verde</option>
+                            <option value="purple">🟣 Morado</option>
+                            <option value="orange">🟠 Naranja</option>
+                            <option value="red">🔴 Rojo</option>
+                            <option value="pink">🟡 Amarillo</option>
+                        </select>
+                    </div>
+
+                   
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Goal Modal -->
+    <div id="goal-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="goal-modal-title">Nueva Meta</h3>
+                <button class="modal-close" onclick="closeGoalModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="goal-form" class="modal-form">
+                    <div class="form-group">
+                        <label for="goal-title">Título de la Meta</label>
+                        <input type="text" id="goal-title" name="title" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="goal-amount">Monto Objetivo (COP)</label>
+                        <input type="number" id="goal-amount" name="targetAmount" min="0" step="1000" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="goal-deadline">Fecha Límite</label>
+                        <input type="date" id="goal-deadline" name="deadline" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="goal-description">Descripción</label>
+                        <textarea id="goal-description" name="description" rows="3"></textarea>
+                    </div>
+
+                    <div class="modal-actions">
+                        <button type="button" class="btn-secondary" onclick="closeGoalModal()">
+                            Cancelar
+                        </button>
+                        <button type="submit" class="btn-primary">
+                            Crear Meta
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Reminder Modal -->
+    <div id="reminder-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="reminder-modal-title">Nuevo Recordatorio</h3>
+                <button class="modal-close" onclick="closeReminderModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="reminder-form" class="modal-form">
+                    <div class="form-group">
+                        <label for="reminder-title">Título</label>
+                        <input type="text" id="reminder-title" name="title" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="reminder-amount">Monto (COP)</label>
+                        <input type="number" id="reminder-amount" name="amount" min="0" step="100">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="reminder-date">Fecha</label>
+                        <input type="date" id="reminder-date" name="date" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="reminder-type">Tipo</label>
+                        <select id="reminder-type" name="type" required>
+                            <option value="">Selecciona el tipo</option>
+                            <option value="payment">Pago</option>
+                            <option value="income">Ingreso Esperado</option>
+                            <option value="goal">Meta Financiera</option>
+                            <option value="other">Otro</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="reminder-recurring">Recurrente</label>
+                        <select id="reminder-recurring" name="recurring">
+                            <option value="none">No recurrente</option>
+                            <option value="daily">Diario</option>
+                            <option value="weekly">Semanal</option>
+                            <option value="monthly">Mensual</option>
+                            <option value="yearly">Anual</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="reminder-description">Descripción</label>
+                        <textarea id="reminder-description" name="description" rows="3"></textarea>
+                    </div>
+
+                    <div class="modal-actions">
+                        <button type="button" class="btn-secondary" onclick="closeReminderModal()">
+                            Cancelar
+                        </button>
+                        <button type="submit" class="btn-primary">
+                            Crear Recordatorio
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Money to Pocket Modal -->
+    <div id="add-money-modal" class="modal">
+        <div class="modal-content">
+            
+            <div class="modal-body">
+                <form id="add-money-form" class="modal-form">
+                    <div class="form-group">
+                        <label for="add-money-amount">Monto a Agregar (COP)</label>
+                        <input type="number" id="add-money-amount" name="amount" min="0" step="100" required>
+                    </div>
+
+                    <div class="modal-actions">
+                        <button type="button" class="btn-secondary" onclick="closeAddMoneyModal()">
+                            Cancelar
+                        </button>
+                        <button type="submit" class="btn-primary">
+                            Agregar Dinero
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Progress to Goal Modal -->
+    <div id="add-progress-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Agregar Progreso a la Meta</h3>
+                <button class="modal-close" onclick="closeAddProgressModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="add-progress-form" class="modal-form">
+                    <div class="form-group">
+                        <label for="add-progress-amount">Monto a Agregar (COP)</label>
+                        <input type="number" id="add-progress-amount" name="amount" min="0" step="100" required>
+                    </div>
+
+                    <div class="modal-actions">
+                        <button type="button" class="btn-secondary" onclick="closeAddProgressModal()">
+                            Cancelar
+                        </button>
+                        <button type="submit" class="btn-primary">
+                            Agregar Progreso
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Container -->
+    <div id="toast-container" class="toast-container"></div>
+    </div>
+
+
+
+
+
+
+</body>
+<script src="./js/script.js"></script>
+
+</html>
